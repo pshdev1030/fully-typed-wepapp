@@ -1,16 +1,19 @@
 {
   "scripts": {
     "dev:server": "tsx watch server",
-    "dev:client": "wait-port 3000 && tsx watch client"
+    "dev:client": "wait-port 3000 && tsx watch client",
+    "dev:prisma": "npx prisma generate && npx ts-node prisma/index.ts"
   },
   "dependencies": {
+    "@prisma/client": "^4.13.0",
     "@trpc/client": "^10.23.0",
     "@trpc/server": "^10.23.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "tsx": "^3.12.7",
     "@types/node": "^18.16.3",
+    "prisma": "^4.13.0",
+    "tsx": "^3.12.7",
     "typescript": "^5.0.4",
     "wait-port": "^1.0.4"
   }
