@@ -3,14 +3,6 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$connect();
-
-  await prisma.user.create({
-    data: {
-      name: "성현",
-    },
-  });
-
-  const allUsers = await prisma.user.findMany();
 }
 
 main()

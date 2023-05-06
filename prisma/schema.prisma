@@ -8,6 +8,28 @@ generator client {
 }
 
 model User {
-    id   String @id @default(auto()) @map("_id") @db.ObjectId()
-    name String
+    id        String     @id @default(auto()) @map("_id") @db.ObjectId()
+    name      String
+    TodoLists ToDoList[]
+}
+
+model ToDoList {
+    id          String   @id @default(uuid()) @map("_id")
+    title       String
+    description String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
+    toDos       ToDo[]
+    user        User     @relation(fields: [userId], references: [id])
+    userId      String   @db.ObjectId()
+}
+
+model ToDo {
+    id          String   @id @default(uuid()) @map("_id")
+    title       String
+    description String
+    createdAt   DateTime @default(now())
+    upatedAt    DateTime @default(now()) @updatedAt
+    toDoList    ToDoList @relation(fields: [toDoListId], references: [id])
+    toDoListId  String
 }
