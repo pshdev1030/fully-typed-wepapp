@@ -7,12 +7,6 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model User {
-    id        String     @id @default(auto()) @map("_id") @db.ObjectId()
-    name      String
-    TodoLists ToDoList[]
-}
-
 model ToDoList {
     id          String   @id @default(uuid()) @map("_id")
     title       String
@@ -20,8 +14,6 @@ model ToDoList {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
     toDos       ToDo[]
-    user        User     @relation(fields: [userId], references: [id])
-    userId      String   @db.ObjectId()
 }
 
 model ToDo {
