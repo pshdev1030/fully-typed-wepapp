@@ -3,6 +3,17 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$connect();
+  await prisma.toDoList.upsert({
+    where: {
+      id: "3",
+    },
+    update: {},
+    create: {
+      id: "3",
+      title: "dummy todolist",
+      description: "더미데이터 입니다.",
+    },
+  });
 }
 
 main()
