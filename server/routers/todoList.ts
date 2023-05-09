@@ -14,7 +14,7 @@ const defaultTodoListSelect = Prisma.validator<Prisma.ToDoListSelect>()({
 });
 
 export const todoListRouter = router({
-  getListById: publicProcedure
+  byId: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -33,42 +33,5 @@ export const todoListRouter = router({
           message: "No Todolist found.",
         });
       return list;
-    }),
-  postTodo: publicProcedure
-    .input(
-      z.object({
-        targetId: z.string(),
-        title: z.string(),
-        description: z.string(),
-      })
-    )
-    .query(async ({ input }) => {
-      const { targetId, title, description } = input;
-      const targetTodoList = await prisma.toDoList.findUnique({
-        select: defaultTodoListSelect,
-        where: { id: targetId },
-      });
-
-      if (!targetTodoList) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "No Todolist found.",
-        });
-      }
-
-      const newTodo = await prisma.toDo.create({
-        data: {
-          toDoList: { connect: { id: targetTodoList.id } },
-          title,
-          description,
-        },
-      });
-
-      await prisma.toDoList.update({
-        where: { id: targetTodoList.id },
-        data: { toDos: { connect: { id: newTodo.id } } },
-      });
-
-      return newTodo;
     }),
 });
