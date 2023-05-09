@@ -21,5 +21,6 @@ export const todoListRouter = router({
           code: "NOT_FOUND",
           message: "No Todolist found.",
         });
+      return list;
     }),
 });

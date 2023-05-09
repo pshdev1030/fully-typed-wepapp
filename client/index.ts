@@ -11,7 +11,7 @@ const trpc = createTRPCProxyClient<AppRouter>({
 
 (async function () {
   try {
-    const list = await trpc.todolist.list.query({ id: "4" });
+    const list = await trpc.todolist.list.query({ id: "3" });
     console.log(list);
   } catch (error) {
     console.log(error);
