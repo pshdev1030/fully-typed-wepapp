@@ -17,16 +17,16 @@ export const todoRouter = router({
   add: publicProcedure
     .input(
       z.object({
-        targetId: z.string(),
+        todoListId: z.string(),
         title: z.string(),
         description: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const { targetId, title, description } = input;
+      const { todoListId, title, description } = input;
       const targetTodoList = await prisma.toDoList.findUnique({
         select: defaultTodoListSelect,
-        where: { id: targetId },
+        where: { id: todoListId },
       });
 
       if (!targetTodoList) {
@@ -54,16 +54,16 @@ export const todoRouter = router({
   edit: publicProcedure
     .input(
       z.object({
-        todoId: z.string(),
+        id: z.string(),
         title: z.string(),
         description: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const { todoId, title, description } = input;
+      const { id, title, description } = input;
       const targetTodo = await prisma.toDo.update({
         where: {
-          id: todoId,
+          id: id,
         },
         data: {
           title,
@@ -73,13 +73,13 @@ export const todoRouter = router({
       return targetTodo;
     }),
   delete: publicProcedure
-    .input(z.object({ todoId: z.string() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
-      const { todoId } = input;
+      const { id } = input;
 
       const targetTodo = await prisma.toDo.findUnique({
         where: {
-          id: todoId,
+          id: id,
         },
       });
       if (!targetTodo) {
@@ -90,7 +90,31 @@ export const todoRouter = router({
       }
       await prisma.toDo.delete({
         where: {
-          id: todoId,
+          id: id,
+        },
+      });
+    }),
+  deleteAll: publicProcedure
+    .input(z.object({ todoListId: z.string() }))
+    .mutation(async ({ input }) => {
+      const { todoListId } = input;
+
+      const targetTodoList = await prisma.toDoList.findUnique({
+        where: {
+          id: todoListId,
+        },
+      });
+
+      if (!targetTodoList) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No Todolist found.",
+        });
+      }
+
+      await prisma.toDo.deleteMany({
+        where: {
+          toDoListId: todoListId,
         },
       });
     }),
